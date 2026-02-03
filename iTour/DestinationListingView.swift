@@ -55,9 +55,7 @@ struct DestinationListingView: View {
             modelContext.delete(destination)
         }
     }
-    func filterDestinationsInFuture() {
-        
-    }
+    
 }
 
 #Preview {

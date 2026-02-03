@@ -15,42 +15,46 @@ struct ContentView: View {
     @State private var searchText: String = ""
     @State private var isFilterInFuture: Bool = false
     var body: some View {
-        NavigationStack(path: $path) {
-            DestinationListingView(sort: sortOrder, searchString: searchText, isFilter: isFilterInFuture)
-                .navigationTitle("iTour")
-                .navigationDestination(for: Destination.self) { destination in
-                    EditDestinationView(destination: destination)
-                }
-                //toolbar k đẩy sang đc DestinationListingView.swìt vì nó là 1 phương thức trong NavigationStack, kphai của List
-                
-                .searchable(text: $searchText, prompt: Text("Search Destination"))
-                .toolbar {
-                    Button ("Add Destination", systemImage: "plus", action: addDestination)
-                    Menu("Sort", systemImage: "arrow.up.arrow.down") {
-                        Picker("Sort", selection: $sortOrder) {
-                            Text("Name")
-                                .tag(SortDescriptor(\Destination.name))
-                            Text("Priority")
-                                .tag(SortDescriptor(\Destination.priority, order: .reverse))
-                            Text("Date")
-                                .tag(SortDescriptor(\Destination.date))
-                        }
-                        .pickerStyle(.inline)
+        ZStack {
+            NavigationStack(path: $path) {
+                DestinationListingView(sort: sortOrder, searchString: searchText, isFilter: isFilterInFuture)
+                    .navigationTitle("iTour")
+                    .navigationDestination(for: Destination.self) { destination in
+                        EditDestinationView(destination: destination)
                     }
-                    Menu("Filter", systemImage: "line.3.horizontal.decrease.circle") {
-                        Picker("Filter", selection: $isFilterInFuture) {
-                            Text("Filter in future")
-                                .tag(true)
-                            Text("Show all")
-                                .tag(false)
-                        }
-                    }
+                    //toolbar k đẩy sang đc DestinationListingView.swìt vì nó là 1 phương thức trong NavigationStack, kphai của List
                     
-                }
+                    .searchable(text: $searchText, prompt: Text("Search Destination"))
+                    .toolbar {
+                        Button ("Add Destination", systemImage: "plus", action: addDestination)
+                        Menu("Sort", systemImage: "arrow.up.arrow.down") {
+                            Picker("Sort", selection: $sortOrder) {
+                                Text("Name")
+                                    .tag(SortDescriptor(\Destination.name))
+                                Text("Priority")
+                                    .tag(SortDescriptor(\Destination.priority, order: .reverse))
+                                Text("Date")
+                                    .tag(SortDescriptor(\Destination.date))
+                            }
+                            .pickerStyle(.inline)
+                        }
+                        
+                        Menu("Filter", systemImage: "line.3.horizontal.decrease.circle") {
+                            Picker("Filter", selection: $isFilterInFuture) {
+                                Text("Filter in future")
+                                    .tag(true)
+                                Text("Show all")
+                                    .tag(false)
+                            }
+                        }
+                         
+                        
+                    }
+                
+            }
             
         }
     }
-    
     
     func addDestination() {
         
