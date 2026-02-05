@@ -31,7 +31,7 @@ struct DestinationListingView: View {
             .onDelete(perform: deleteDestinations)
         }
     }
-    init(sort: SortDescriptor<Destination>, searchString: String, isFilter: Bool) {
+    init(sort: [SortDescriptor<Destination>], searchString: String, isFilter: Bool) {
         let now = Date.now
         _destinations = Query(filter: #Predicate {
             return (searchString.isEmpty || $0.name.localizedStandardContains(searchString)) && (!isFilter || $0.date > now)
@@ -46,7 +46,7 @@ struct DestinationListingView: View {
             }
              */
             //$0.date >= Date.now //$0.priority >= 2 Khi này các dữ liệu có độ ưu tiên thấp như 1 thì sẽ k bị xóa, mà chỉ là đang bị ẩn đi thôi
-        }, sort: [sort], animation: .bouncy())
+        }, sort: sort, animation: .bouncy())
     }
     
     func deleteDestinations (_ indexSet: IndexSet) {
@@ -59,5 +59,5 @@ struct DestinationListingView: View {
 }
 
 #Preview {
-    DestinationListingView(sort: SortDescriptor(\Destination.name), searchString: "h", isFilter: true)
+    DestinationListingView(sort: [SortDescriptor(\Destination.name)], searchString: "h", isFilter: true)
 }

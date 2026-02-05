@@ -11,7 +11,7 @@ struct ContentView: View {
     @Environment(\.modelContext) var modelContext
     
     @State private var path = [Destination]()
-    @State private var sortOrder = SortDescriptor(\Destination.name)
+    @State private var sortOrder = [SortDescriptor(\Destination.name, order: .forward)] as [SortDescriptor<Destination>]
     @State private var searchText: String = ""
     @State private var isFilterInFuture: Bool = false
     var body: some View {
@@ -30,11 +30,12 @@ struct ContentView: View {
                         Menu("Sort", systemImage: "arrow.up.arrow.down") {
                             Picker("Sort", selection: $sortOrder) {
                                 Text("Name")
-                                    .tag(SortDescriptor(\Destination.name))
+                                    .tag([SortDescriptor(\Destination.name, order: .forward), SortDescriptor(\Destination.date, order: .forward)] as [SortDescriptor<Destination>])
                                 Text("Priority")
-                                    .tag(SortDescriptor(\Destination.priority, order: .reverse))
+                                    .tag([SortDescriptor(\Destination.priority, order: .reverse), SortDescriptor(\Destination.date, order: .forward)] as [SortDescriptor<Destination>])
                                 Text("Date")
-                                    .tag(SortDescriptor(\Destination.date))
+                                    .tag([SortDescriptor(\Destination.date)] as [SortDescriptor<Destination>])
+                                //quả date này k cần sắp xếp theo 2 điều kiện cho lắm, bởi bản thân để 2 cái date giống nhau nó đã khó r
                             }
                             .pickerStyle(.inline)
                         }
@@ -55,15 +56,16 @@ struct ContentView: View {
             
         }
     }
+    //chưa làm lại UI, chưa để lại giá trị mặc định khi vào lại app là name or date or priority
     
     func addDestination() {
-        
+        /*
         let destination = Destination()
         modelContext.insert(destination)
         path = [destination]
-         
+         */
         // Random name samples
-        /*
+        
         let nameSamples = [
             "Paris Getaway", "Tokyo Adventure", "Alpine Retreat",
             "Beach Escape", "Desert Trek", "City Lights",
@@ -106,7 +108,7 @@ struct ContentView: View {
         )
         modelContext.insert(destination)
         path = [destination]
-         */
+         
     }
 }
 
